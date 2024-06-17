@@ -63,6 +63,7 @@ function getIssueBody(params: Message) {
 const regexForDiscordCredentials =
   /https:\/\/discord\.com\/channels\/(\d+)\/(\d+)\/(\d+)(?=\))/;
 export function getDiscordInfoFromGithubBody(body: string) {
+  if (!body) return { channelId: undefined, id: undefined };
   const match = body.match(regexForDiscordCredentials);
   if (!match || match.length !== 4)
     return { channelId: undefined, id: undefined };
