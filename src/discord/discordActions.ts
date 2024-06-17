@@ -1,4 +1,4 @@
-import { ForumChannel, MessagePayload, ThreadChannel } from "discord.js";
+import {EmbedBuilder, ForumChannel, MessagePayload, ThreadChannel} from "discord.js";
 import { config } from "../config";
 import { Thread } from "../interfaces";
 import {
@@ -88,21 +88,33 @@ export async function createComment({
     .catch(console.error);
 }
 
-export async function archiveThread(node_id: string | undefined) {
+export async function closeThread(node_id: string | undefined) {
   const { thread, channel } = await getThreadChannel(node_id);
   if (!thread || !channel || channel.archived) return;
 
   info(Actions.Closed, thread);
-
+  
+  const embed = new EmbedBuilder()
+    .setColor(0x8957e5)  // Purple
+    .setAuthor({name: "Issue closed", iconURL: "https://i.imgur.com/zA2t7M3.png"});
+  
+  await channel.send({embeds: [embed]});
+  
   thread.archived = true;
   channel.setArchived(true);
 }
 
-export async function unarchiveThread(node_id: string | undefined) {
+export async function reopenThread(node_id: string | undefined) {
   const { thread, channel } = await getThreadChannel(node_id);
   if (!thread || !channel || !channel.archived) return;
 
   info(Actions.Reopened, thread);
+  
+  const embed = new EmbedBuilder()
+    .setColor(0x238636)  // Dark Green
+    .setAuthor({name: "Issue reopened", iconURL: "https://i.imgur.com/cjAosZq.png"})
+  
+  await channel.send({embeds: [embed]});
 
   thread.archived = false;
   channel.setArchived(false);

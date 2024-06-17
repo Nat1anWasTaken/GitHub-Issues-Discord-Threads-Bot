@@ -1,11 +1,11 @@
 import { Request } from "express";
 import {
-  archiveThread,
+  closeThread,
   createComment,
   createThread,
   deleteThread,
   lockThread,
-  unarchiveThread,
+  reopenThread,
   unlockThread,
 } from "../discord/discordActions";
 import { GitHubLabel } from "../interfaces";
@@ -54,12 +54,12 @@ export async function handleCreated(req: Request) {
 
 export async function handleClosed(req: Request) {
   const node_id = await getIssueNodeId(req);
-  archiveThread(node_id);
+  closeThread(node_id);
 }
 
 export async function handleReopened(req: Request) {
   const node_id = await getIssueNodeId(req);
-  unarchiveThread(node_id);
+  reopenThread(node_id);
 }
 
 export async function handleLocked(req: Request) {
