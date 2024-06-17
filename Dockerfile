@@ -7,6 +7,9 @@ WORKDIR /usr/src/app
 
 FROM base as deps
 
+RUN apk add --no-cache python3 make g++ \
+    && if [ ! -e /usr/bin/python ]; then ln -s /usr/bin/python3 /usr/bin/python; fi
+
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
